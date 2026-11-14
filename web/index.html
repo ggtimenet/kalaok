@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b0d18">
   <title>KalaOK｜線上點歌測試系統</title>
   <meta name="description" content="KalaOK 線上點歌系統測試站，提供虛構歌曲與測試帳號供功能驗證。">
-  <link rel="stylesheet" href="/style.css">
-  <script src="/app.js" defer></script>
+  <link rel="stylesheet" href="/style.css?v=20261114b">
+  <script src="/app.js?v=20261114b" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -48,6 +48,7 @@
           <button data-genre="台語金曲" class="chip" type="button">台語金曲</button>
           <button data-genre="日韓精選" class="chip" type="button">日韓精選</button>
         </div>
+        <p class="interaction-hint">點擊歌名、封面或「加入清單」，歌曲會加入右側的待播清單。<strong>目前尚未串接 YouTube，點歌不會播放影片。</strong></p>
         <div id="songsList" class="song-list" aria-live="polite"></div>
       </section>
       <aside class="sidebar">

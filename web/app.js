@@ -51,14 +51,14 @@ function renderSongs() {
     const c = cover(i);
     return '<article class="song">' +
       '<div class="song-index">' + String(i + 1).padStart(2, '0') + '</div>' +
-      '<div class="cover" style="--c1:' + c[0] + ';--c2:' + c[1] + '" aria-hidden="true">♫</div>' +
-      '<div class="song-main"><div class="song-title">' + escapeHtml(song.title) +
-      '</div><div class="song-meta">' + escapeHtml(song.artist) + ' · ' + escapeHtml(song.language) + ' · ' + escapeHtml(song.genre) + '</div></div>' +
+      '<button class="cover song-select" style="--c1:' + c[0] + ';--c2:' + c[1] + '" data-action="queue" data-id="' + escapeHtml(song.id) + '" type="button" aria-label="加入待播清單：' + escapeHtml(song.title) + '">♫</button>' +
+      '<div class="song-main"><button type="button" class="song-title song-select song-title-button" data-action="queue" data-id="' + escapeHtml(song.id) + '" aria-label="加入待播清單：' + escapeHtml(song.title) + '">' + escapeHtml(song.title) +
+      '</button><div class="song-meta">' + escapeHtml(song.artist) + ' · ' + escapeHtml(song.language) + ' · ' + escapeHtml(song.genre) + '</div></div>' +
       '<span class="song-length">' + escapeHtml(song.duration) + '</span>' +
       '<button class="icon-button' + (favorites.has(song.id) ? ' active' : '') +
       '" data-action="favorite" data-id="' + escapeHtml(song.id) + '" type="button" aria-label="切換收藏" title="收藏">' + (favorites.has(song.id) ? '♥' : '♡') + '</button>' +
       '<button class="add-button" data-action="queue" data-id="' + escapeHtml(song.id) +
-      '" type="button">' + (queue.has(song.id) ? '已點播' : '+ 點歌') + '</button></article>';
+      '" type="button">' + (queue.has(song.id) ? '已加入' : '+ 加入清單') + '</button></article>';
   }).join('');
 }
 function renderQueue() {
@@ -157,7 +157,7 @@ async function handleAction(event) {
       notify(result.favorite ? '已加入我的最愛 ♡' : '已取消收藏');
     } else if (action === 'queue') {
       const result = await request('queue', 'POST', { songId: id });
-      notify(result.duplicate ? '這首歌已在點播清單中。' : '已成功加入點播清單！');
+      notify(result.duplicate ? '這首歌已在待播清單。此測試版還沒有連接 YouTube 播放。' : '已加入待播清單！目前只測試清單，不會播放影片。');
     } else if (action === 'remove') {
       await request('queue/remove', 'POST', { songId: id });
       notify('已從點播清單移除。');
