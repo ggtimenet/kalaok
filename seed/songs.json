@@ -1,182 +1,74 @@
 [
   {
     "id": "s01",
-    "title": "午夜月光",
-    "artist": "夏沐晴",
-    "genre": "華語流行",
+    "title": "告白氣球",
+    "artist": "周杰倫",
+    "genre": "華語伴唱",
     "language": "華語",
-    "duration": "03:42",
-    "plays": 300
+    "videoId": "OGqa56nhl0A",
+    "sourceChannel": "旋律星球 - Melody Planet"
   },
   {
     "id": "s02",
-    "title": "雨後的台北",
-    "artist": "林亦辰",
-    "genre": "華語流行",
+    "title": "後來",
+    "artist": "劉若英",
+    "genre": "華語伴唱",
     "language": "華語",
-    "duration": "04:05",
-    "plays": 473
+    "videoId": "b_6ZJOzXNjw",
+    "sourceChannel": "旋律星球 - Melody Planet"
   },
   {
     "id": "s03",
-    "title": "星空慢慢亮",
-    "artist": "南島樂團",
-    "genre": "抒情",
+    "title": "勇氣",
+    "artist": "梁靜茹",
+    "genre": "華語伴唱",
     "language": "華語",
-    "duration": "03:58",
-    "plays": 646
+    "videoId": "AwhCbQZ8Afw",
+    "sourceChannel": "旋律星球 - Melody Planet"
   },
   {
     "id": "s04",
-    "title": "城市漫步",
-    "artist": "薄荷街角",
-    "genre": "華語流行",
+    "title": "小幸運",
+    "artist": "田馥甄",
+    "genre": "華語伴唱",
     "language": "華語",
-    "duration": "03:26",
-    "plays": 819
+    "videoId": "Bj8mxQB0wlY",
+    "sourceChannel": "旋律星球 - Melody Planet"
   },
   {
     "id": "s05",
-    "title": "追著海風",
-    "artist": "蔡若海",
-    "genre": "台語金曲",
-    "language": "台語",
-    "duration": "04:12",
-    "plays": 992
+    "title": "Perfect",
+    "artist": "Ed Sheeran",
+    "genre": "西洋伴唱",
+    "language": "英語",
+    "videoId": "sPMA1tqWuf4",
+    "sourceChannel": "Sing King"
   },
   {
     "id": "s06",
-    "title": "海岸的約定",
-    "artist": "江蘇澄",
-    "genre": "抒情",
-    "language": "華語",
-    "duration": "04:18",
-    "plays": 1165
+    "title": "Someone Like You",
+    "artist": "Adele",
+    "genre": "西洋伴唱",
+    "language": "英語",
+    "videoId": "_uORhCSX2f8",
+    "sourceChannel": "Sing King"
   },
   {
     "id": "s07",
-    "title": "霓虹舞步",
-    "artist": "Luna Beat",
-    "genre": "舞曲",
+    "title": "Dancing Queen",
+    "artist": "ABBA",
+    "genre": "西洋伴唱",
     "language": "英語",
-    "duration": "03:20",
-    "plays": 1338
+    "videoId": "WHayJZ3eMcE",
+    "sourceChannel": "Sing King"
   },
   {
     "id": "s08",
-    "title": "遇見星期天",
-    "artist": "陳微光",
-    "genre": "華語流行",
-    "language": "華語",
-    "duration": "03:33",
-    "plays": 1511
-  },
-  {
-    "id": "s09",
-    "title": "島嶼微風",
-    "artist": "月桃花",
-    "genre": "台語金曲",
-    "language": "台語",
-    "duration": "04:01",
-    "plays": 1684
-  },
-  {
-    "id": "s10",
-    "title": "午後八分甜",
-    "artist": "星町咖啡",
-    "genre": "日韓精選",
-    "language": "日語",
-    "duration": "03:47",
-    "plays": 1857
-  },
-  {
-    "id": "s11",
-    "title": "宇宙那一端",
-    "artist": "City Signal",
-    "genre": "舞曲",
+    "title": "Yellow",
+    "artist": "Coldplay",
+    "genre": "西洋伴唱",
     "language": "英語",
-    "duration": "03:15",
-    "plays": 330
-  },
-  {
-    "id": "s12",
-    "title": "微醺的晚餐",
-    "artist": "珊瑚星期六",
-    "genre": "抒情",
-    "language": "華語",
-    "duration": "04:22",
-    "plays": 503
-  },
-  {
-    "id": "s13",
-    "title": "藍色指北針",
-    "artist": "佐藤晴空",
-    "genre": "日韓精選",
-    "language": "日語",
-    "duration": "04:06",
-    "plays": 676
-  },
-  {
-    "id": "s14",
-    "title": "雨巷慢拍",
-    "artist": "楊雨杉",
-    "genre": "台語金曲",
-    "language": "台語",
-    "duration": "03:56",
-    "plays": 849
-  },
-  {
-    "id": "s15",
-    "title": "星塵探戈",
-    "artist": "Orbit Five",
-    "genre": "舞曲",
-    "language": "英語",
-    "duration": "03:29",
-    "plays": 1022
-  },
-  {
-    "id": "s16",
-    "title": "開往春天",
-    "artist": "河流合唱團",
-    "genre": "華語流行",
-    "language": "華語",
-    "duration": "04:16",
-    "plays": 1195
-  },
-  {
-    "id": "s17",
-    "title": "昨日海灣",
-    "artist": "趙之岸",
-    "genre": "抒情",
-    "language": "華語",
-    "duration": "04:35",
-    "plays": 1368
-  },
-  {
-    "id": "s18",
-    "title": "銀河小夜曲",
-    "artist": "Sora Ensemble",
-    "genre": "日韓精選",
-    "language": "韓語",
-    "duration": "03:49",
-    "plays": 1541
-  },
-  {
-    "id": "s19",
-    "title": "暮光迴聲",
-    "artist": "微藍樂隊",
-    "genre": "華語流行",
-    "language": "華語",
-    "duration": "03:52",
-    "plays": 1714
-  },
-  {
-    "id": "s20",
-    "title": "風從山來",
-    "artist": "茶山民謠社",
-    "genre": "台語金曲",
-    "language": "台語",
-    "duration": "04:28",
-    "plays": 1887
+    "videoId": "XZN3DaxqFuQ",
+    "sourceChannel": "Sing King"
   }
 ]

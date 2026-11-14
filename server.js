@@ -49,7 +49,7 @@ const commonHeaders = {
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'X-Robots-Tag': 'noindex, nofollow, noarchive',
-  'Content-Security-Policy': "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'"
+  'Content-Security-Policy': "default-src 'self'; style-src 'self'; script-src 'self' https://www.youtube.com https://s.ytimg.com; img-src 'self' https://i.ytimg.com; connect-src 'self' https://www.youtube.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'"
 };
 function send(res, status, data, extra = {}) {
   res.writeHead(status, {
