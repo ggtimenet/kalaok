@@ -146,8 +146,9 @@ window.onYouTubeIframeAPIReady = function () {
   initYouTubePlayer();
 };
 function initYouTubePlayer() {
-  if (!state.user || ytPlayer || !window.YT || typeof window.YT.Player !== 'function') return;
+  if (!state.user || !pendingVideoId || ytPlayer || !window.YT || typeof window.YT.Player !== 'function') return;
   ytPlayer = new window.YT.Player('youtube-player', {
+    videoId: pendingVideoId,
     width: '100%', height: '100%',
     playerVars: { enablejsapi: 1, playsinline: 1, rel: 0, origin: window.location.origin },
     events: {
@@ -178,6 +179,9 @@ function initYouTubePlayer() {
         } else if (event.data === states.BUFFERING) {
           setPlayerStatus('正在載入 YouTube 影片…');
         }
+      },
+      onAutoplayBlocked: () => {
+        setPlayerStatus('瀏覽器阻止了自動播放。請點一下影片中央的播放鍵繼續。');
       },
       onError: event => {
         setPlayerStatus('這支 YouTube 影片無法在此頁內播放（錯誤 ' +

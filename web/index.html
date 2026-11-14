@@ -39,7 +39,7 @@
     <section class="player-section" aria-label="KTV YouTube 播放區">
       <div class="player-header"><div><span class="eyebrow second">YOUTUBE KARAOKE</span><h2>現在播放</h2></div><span class="player-badge">官方嵌入播放器</span></div>
       <div class="player-grid">
-        <div class="player-screen"><div id="youtube-player" class="youtube-player" aria-label="YouTube 影片播放器"></div></div>
+        <div class="player-screen"><div id="youtube-player" class="youtube-player" aria-label="YouTube 影片播放器"><span class="player-placeholder">▶ 點選歌曲開始播放 YouTube 伴唱影片</span></div></div>
         <div class="player-details">
           <span class="eyebrow second">NOW PLAYING</span>
           <h3 id="nowTitle">選擇歌曲開始播放</h3>
@@ -48,7 +48,7 @@
             <button id="playPauseButton" class="player-btn" type="button" disabled>▶ 播放 / 暫停</button>
             <button id="nextButton" class="player-btn" type="button" disabled>下一首 →</button>
           </div>
-          <p class="player-status" id="playerStatus" role="status" aria-live="polite">播放器載入中；請先選一首歌曲。</p>
+          <p class="player-status" id="playerStatus" role="status" aria-live="polite">選擇歌曲並按「▶ 播放」，就會載入對應的 YouTube 影片。</p>
           <a id="youtubeSource" class="youtube-source" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" hidden>在 YouTube 開啟此影片 ↗</a>
           <p class="player-tip">影片由 YouTube 提供。播完可自動切換到待播清單下一首；部分手機瀏覽器可能要求再次點擊播放。若嵌入遭限制，可使用上方連結。</p>
         </div>
