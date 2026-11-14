@@ -43,3 +43,7 @@ The mobile CSS was redesigned after a verified 475px intrinsic grid overflow on 
 The original eight karaoke references are still **unverified for embedding** and may return YouTube errors 101/150. Metadata or oEmbed alone cannot establish permission to embed. This version adds a distinctly labeled **Google for Developers YouTube IFrame API official sample video** (`M7lc1UVf-VE`) as a separate *non-karaoke* diagnostic entry. The locally self-produced video remains the reliable playback test.
 
 No third-party karaoke video has been independently proven embeddable; do not claim the 8 songs are licensed or certified. For an actual usable karaoke catalogue, request the uploader's permission or confirm YouTube Data API `status.embeddable` and on-device playback, then separately handle public/commercial music rights.
+
+## Updated YouTube video test catalogue
+
+The eight initial broken/unverified karaoke video links were replaced with identifiable traditional karaoke uploads from Lugn Karaoke. These remain **unverified for embedding** until a real-device test confirms availability. See [docs/YOUTUBE_REPLACEMENT.md](docs/YOUTUBE_REPLACEMENT.md) for source URLs, test scope and rights limitations.

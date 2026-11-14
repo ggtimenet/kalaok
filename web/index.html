@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b0d18">
   <title>KalaOK｜線上點歌測試系統</title>
   <meta name="description" content="KalaOK 線上點歌系統測試站，提供真實 YouTube 伴唱影片清單及測試帳號供功能驗證。">
-  <link rel="stylesheet" href="/style.css?v=20261114f">
-  <script src="/app.js?v=20261114f" defer></script>
+  <link rel="stylesheet" href="/style.css?v=20261114g">
+  <script src="/app.js?v=20261114g" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -21,7 +21,7 @@
     <div class="eyebrow"><span></span> YOUR MUSIC. YOUR MOMENT.</div>
     <h1>今晚，就從<span>這首歌</span>開始。</h1>
     <p>從搜尋、點歌到最愛收藏，先體驗 KalaOK 的操作流程。這是測試站，歌曲資料改採 YouTube 公開伴唱影片；登入帳號與點歌紀錄仍為測試資料。</p>
-    <div class="metrics"><div><strong>09</strong><small>8 首伴唱候選＋2 支播放測試</small></div><div><strong>03</strong><small>組測試帳號</small></div><div><strong>24/7</strong><small>隨時探索功能</small></div></div>
+    <div class="metrics"><div><strong>09</strong><small>8 首新伴唱來源＋2 支播放測試</small></div><div><strong>03</strong><small>組測試帳號</small></div><div><strong>24/7</strong><small>隨時探索功能</small></div></div>
   </section>
   <section class="login-panel" id="loginPane">
     <div class="login-copy"><span class="eyebrow second">TEST ACCOUNT</span><h2>登入測試帳號</h2><p>請使用提供的測試帳號與密碼登入。每個帳號都有獨立的待播歌曲與收藏資料。</p>
@@ -73,11 +73,11 @@
         <label class="searchbox" for="searchInput"><span aria-hidden="true">⌕</span><input id="searchInput" autocomplete="off" placeholder="搜尋歌名、歌手、語言…" type="search"></label>
         <div id="genreFilters" class="filters" role="group" aria-label="歌曲類型">
           <button data-genre="全部" class="chip selected" type="button">全部</button>
-          <button data-genre="華語伴唱" class="chip" type="button">華語伴唱</button>
-          <button data-genre="西洋伴唱" class="chip" type="button">西洋伴唱</button>
+          <button data-genre="英語伴唱" class="chip" type="button">英語伴唱</button>
+          <button data-genre="德語伴唱" class="chip" type="button">德語伴唱</button>
           <button data-genre="功能測試" class="chip" type="button">功能測試</button>
         </div>
-        <p class="interaction-hint">點擊封面、歌名或「▶ 播放」可從此裝置遙控播放螢幕；「＋ 點歌」只加入共用待播清單。<strong>原有伴唱影片未取得嵌入權限確認；可先用「功能測試」檢查播放，受限來源不保證可用。</strong></p>
+        <p class="interaction-hint">點擊封面、歌名或「▶ 播放」可從此裝置遙控播放螢幕；「＋ 點歌」只加入共用待播清單。<strong>新伴唱影片仍待實際確認嵌入權限；可先用「功能測試」檢查播放，受限來源不保證可用。</strong></p>
         <div id="songsList" class="song-list" aria-live="polite"></div>
       </section>
       <aside class="sidebar">
