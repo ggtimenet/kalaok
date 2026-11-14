@@ -35,3 +35,11 @@ Same-account TV + phone control, playback state acknowledgements and test limita
 ## Embedded YouTube restrictions and local diagnostic playback
 
 See [docs/PLAYBACK_TEST.md](docs/PLAYBACK_TEST.md). YouTube embed error 150 cannot be bypassed; a self-generated 10-second MP4 is provided for controlled two-screen playback testing.
+
+## Mobile layout and YouTube sources (2026-11-14)
+
+The mobile CSS was redesigned after a verified 475px intrinsic grid overflow on 320–430px viewports. It uses `minmax(0,1fr)`, intrinsic min-width corrections, and a two-row mobile song card so buttons remain readable. Mobile Chromium checks at 320/360/390/430 and tablet 768px show document width exactly equal to the viewport.
+
+The original eight karaoke references are still **unverified for embedding** and may return YouTube errors 101/150. Metadata or oEmbed alone cannot establish permission to embed. This version adds a distinctly labeled **Google for Developers YouTube IFrame API official sample video** (`M7lc1UVf-VE`) as a separate *non-karaoke* diagnostic entry. The locally self-produced video remains the reliable playback test.
+
+No third-party karaoke video has been independently proven embeddable; do not claim the 8 songs are licensed or certified. For an actual usable karaoke catalogue, request the uploader's permission or confirm YouTube Data API `status.embeddable` and on-device playback, then separately handle public/commercial music rights.

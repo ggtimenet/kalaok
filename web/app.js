@@ -83,6 +83,7 @@ function allVisibleSongs() {
 function findSong(id) { return allVisibleSongs().find(s => s.id === id); }
 function sourceLabel(song) {
   if (song.mediaType === 'local') return 'KalaOK 原創測試片 · 無 YouTube 限制';
+  if (song.embedStatus === 'official-example') return 'Google for Developers · YouTube 官方嵌入範例（非伴唱）';
   return (song.sourceChannel || 'YouTube') + ' · 嵌入權限未驗證';
 }
 function renderSongs() {

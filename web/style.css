@@ -61,3 +61,77 @@ button.song-select:hover{color:#d9cbff}
 .local-test-button{display:block;max-width:100%;text-align:left;background:#243b34;color:#d6ffeb;border:1px solid #438364;border-radius:10px;font-size:12px;line-height:1.5;padding:12px 15px;cursor:pointer;margin:8px 0 14px}
 .local-test-button:hover{background:#2a5540}
 .local-test-button:focus-visible{outline:2px solid #9ee2bd;outline-offset:2px}
+
+/* Mobile RWD v2: prevent intrinsic grid minimums from widening the 320–430px viewport. */
+html,body{max-width:100%;overflow-x:clip}
+#appPane,.workspace,.workspace>*,
+.catalog,.sidebar,.player-section,.player-grid,.player-details,
+.song-list,.song,.song-main,.song-meta,.filters{min-width:0;max-width:100%}
+.searchbox input{min-width:0}
+.song-title,.song-meta{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.song-title-button{width:100%}
+@media(max-width:940px){
+  .workspace{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:650px){
+  main{padding:0 15px 46px}
+  header.topbar{padding:16px 17px}
+  .top-actions{white-space:nowrap}
+  .intro{padding:36px 1px 27px}
+  .intro h1{font-size:clamp(30px,9vw,37px);line-height:1.28;letter-spacing:-.04em}
+  .intro p{font-size:13px;line-height:1.78}
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metrics strong{font-size:21px}
+  .metrics small{font-size:10px;line-height:1.5}
+  .account-strip{padding:11px 13px;gap:10px}
+  .account-strip .ghost{padding:9px 11px;flex-shrink:0}
+  .player-section{padding:17px 14px;border-radius:16px;margin-bottom:17px}
+  .player-header{align-items:flex-start}
+  .player-header h2{font-size:20px}
+  .screen-rolebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .screen-rolebar .role-button{min-width:0;min-height:44px;padding:9px 7px;text-align:center}
+  #takeoverButton{grid-column:1 / -1}
+  .screen-rolebar #syncStatus{grid-column:1 / -1;margin:0;width:auto;font-size:12px;white-space:normal}
+  .screen-role-note{font-size:12px;line-height:1.7;margin-bottom:13px}
+  .player-grid{gap:15px}
+  .player-screen{aspect-ratio:16 / 9}
+  .player-screen:has(.remote-preview:not([hidden])){aspect-ratio:auto;min-height:130px}
+  .remote-preview{padding:15px 12px;gap:4px}
+  .remote-preview>span{font-size:26px}
+  .remote-preview strong{font-size:15px}
+  .remote-preview p{font-size:11px}
+  .player-details{padding:0 1px}
+  .player-details h3{font-size:21px;margin:5px 0}
+  .player-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:9px 0}
+  .player-actions .player-btn{min-width:0;min-height:44px;padding:8px 5px;font-size:12px;white-space:normal}
+  .player-actions .activate-btn{grid-column:1/-1}
+  .room-feedback,.player-status{font-size:12px!important;line-height:1.65!important;overflow-wrap:anywhere}
+  .player-tip{font-size:11px!important;line-height:1.75!important}
+  .catalog,.sidebar{width:100%;min-width:0;padding:15px;border-radius:16px}
+  .section-heading h2{font-size:22px}
+  .filters{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:11px;min-height:35px;padding:7px 11px}
+  .song-list{gap:9px}
+  .song{display:grid;grid-template-columns:16px 39px minmax(0,1fr) 58px 36px;grid-template-rows:minmax(39px,auto) auto;column-gap:8px;row-gap:9px;padding:11px 10px;min-width:0;width:100%;align-items:center}
+  .song-index{grid-column:1;grid-row:1;width:16px;font-size:11px}
+  .song .cover{grid-column:2;grid-row:1;width:39px;height:39px;flex-basis:auto}
+  .song-main{grid-column:3/5;grid-row:1;min-width:0;width:100%}
+  .song-title{font-size:13px}
+  .song-meta{font-size:11px;white-space:nowrap}
+  .song .icon-button{grid-column:5;grid-row:1;width:36px;height:36px;display:grid;place-items:center;padding:0}
+  .song .add-button{grid-column:2 / 4;grid-row:2;min-width:0;height:38px;justify-self:stretch;font-size:12px;padding:8px 10px}
+  .song .play-action{grid-column:4/6;grid-row:2;width:100%;min-width:0;height:38px;padding:8px 3px;white-space:nowrap;font-size:10px}
+  .sidebar{display:block;margin-top:0}
+  .queue-item,.favorite-item{min-width:0;padding:11px}
+  .queue-copy{min-width:0}
+  .queue-play,.remove{min-width:33px;min-height:36px}
+  .disclaimer{margin-top:26px;padding:17px}
+}
+@media(max-width:350px){
+  main{padding-left:12px;padding-right:12px}
+  .catalog,.sidebar{padding:12px}
+  .song{grid-template-columns:13px 34px minmax(0,1fr) 50px 34px;column-gap:6px;padding:10px 7px}
+  .song-index{width:13px}
+  .song .cover{width:34px;height:34px}
+  .song .icon-button{width:34px}
+}

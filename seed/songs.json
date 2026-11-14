@@ -6,7 +6,8 @@
     "genre": "華語伴唱",
     "language": "華語",
     "videoId": "OGqa56nhl0A",
-    "sourceChannel": "旋律星球 - Melody Planet"
+    "sourceChannel": "旋律星球 - Melody Planet",
+    "embedStatus": "unverified"
   },
   {
     "id": "s02",
@@ -15,7 +16,8 @@
     "genre": "華語伴唱",
     "language": "華語",
     "videoId": "b_6ZJOzXNjw",
-    "sourceChannel": "旋律星球 - Melody Planet"
+    "sourceChannel": "旋律星球 - Melody Planet",
+    "embedStatus": "unverified"
   },
   {
     "id": "s03",
@@ -24,7 +26,8 @@
     "genre": "華語伴唱",
     "language": "華語",
     "videoId": "AwhCbQZ8Afw",
-    "sourceChannel": "旋律星球 - Melody Planet"
+    "sourceChannel": "旋律星球 - Melody Planet",
+    "embedStatus": "unverified"
   },
   {
     "id": "s04",
@@ -33,7 +36,8 @@
     "genre": "華語伴唱",
     "language": "華語",
     "videoId": "Bj8mxQB0wlY",
-    "sourceChannel": "旋律星球 - Melody Planet"
+    "sourceChannel": "旋律星球 - Melody Planet",
+    "embedStatus": "unverified"
   },
   {
     "id": "s05",
@@ -42,7 +46,8 @@
     "genre": "西洋伴唱",
     "language": "英語",
     "videoId": "sPMA1tqWuf4",
-    "sourceChannel": "Sing King"
+    "sourceChannel": "Sing King",
+    "embedStatus": "unverified"
   },
   {
     "id": "s06",
@@ -51,7 +56,8 @@
     "genre": "西洋伴唱",
     "language": "英語",
     "videoId": "_uORhCSX2f8",
-    "sourceChannel": "Sing King"
+    "sourceChannel": "Sing King",
+    "embedStatus": "unverified"
   },
   {
     "id": "s07",
@@ -60,7 +66,8 @@
     "genre": "西洋伴唱",
     "language": "英語",
     "videoId": "WHayJZ3eMcE",
-    "sourceChannel": "Sing King"
+    "sourceChannel": "Sing King",
+    "embedStatus": "unverified"
   },
   {
     "id": "s08",
@@ -69,7 +76,8 @@
     "genre": "西洋伴唱",
     "language": "英語",
     "videoId": "XZN3DaxqFuQ",
-    "sourceChannel": "Sing King"
+    "sourceChannel": "Sing King",
+    "embedStatus": "unverified"
   },
   {
     "id": "s09",
@@ -81,5 +89,15 @@
     "mediaPath": "/media/sync-test.mp4",
     "duration": "00:10",
     "sourceChannel": "KalaOK Demo"
+  },
+  {
+    "id": "s10",
+    "title": "YouTube 官方嵌入播放器測試",
+    "artist": "Google for Developers",
+    "genre": "功能測試",
+    "language": "英文",
+    "videoId": "M7lc1UVf-VE",
+    "sourceChannel": "Google for Developers",
+    "embedStatus": "official-example"
   }
 ]
