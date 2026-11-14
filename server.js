@@ -8,6 +8,7 @@ const crypto = require('node:crypto');
 const PORT = Number(process.env.PORT || 8080);
 const DATA_DIR = process.env.KALAOK_DATA_DIR || '/data';
 const STATE_PATH = path.join(DATA_DIR, 'state.json');
+const ROOMS_PATH = path.join(DATA_DIR, 'rooms.json');
 const USERS_JSON = process.env.KALAOK_DEMO_USERS_B64;
 const KEY_HEX = process.env.KALAOK_SESSION_SECRET || '';
 if (!USERS_JSON || !/^[0-9a-f]{64,}$/i.test(KEY_HEX)) {
@@ -106,6 +107,68 @@ function readJson(req) {
     req.on('error', reject);
   });
 }
+
+/** Account-scoped cross-screen control state, independent from existing queue data. */
+let rooms;
+try {
+  rooms = fs.existsSync(ROOMS_PATH) ? JSON.parse(fs.readFileSync(ROOMS_PATH, 'utf8')) : {};
+} catch (error) {
+  console.error('Cannot read existing room state', error.message);
+  process.exit(1);
+}
+function persistRooms() {
+  const tmp = ROOMS_PATH + '.tmp';
+  fs.writeFileSync(tmp, JSON.stringify(rooms, null, 2), { mode: 0o600 });
+  fs.renameSync(tmp, ROOMS_PATH);
+}
+function roomFor(username) {
+  if (!rooms[username]) {
+    rooms[username] = {
+      revision: 0, songId: null, action: 'stop',
+      updatedAt: Date.now(), display: null, feedback: null
+    };
+  }
+  return rooms[username];
+}
+function activeDisplay(room) {
+  return !!(room.display && Date.now() - room.display.lastSeen < 20000);
+}
+function roomView(username) {
+  const room = roomFor(username);
+  const live = activeDisplay(room);
+  return {
+    revision: room.revision,
+    songId: room.songId,
+    song: songById.get(room.songId) || null,
+    action: room.action,
+    updatedAt: room.updatedAt,
+    display: {
+      online: live,
+      name: live ? room.display.name : null,
+      lastSeen: live ? room.display.lastSeen : null,
+      ackRevision: live ? room.display.ackRevision || 0 : 0,
+      status: live ? room.display.status || 'waiting' : 'offline',
+      detail: live ? room.display.detail || '' : ''
+    },
+    queue: revealSongs(userState(username).queue),
+    favorites: revealSongs(userState(username).favorites)
+  };
+}
+function safeDeviceId(input) {
+  return typeof input === 'string' && /^[a-zA-Z0-9_-]{12,80}$/.test(input) ? input : null;
+}
+function updateCommand(room, action, songId) {
+  room.revision = (Number(room.revision) || 0) + 1;
+  room.action = action;
+  room.songId = songId;
+  room.updatedAt = Date.now();
+  room.feedback = null;
+  if (room.display) {
+    room.display.status = 'pending';
+    room.display.detail = '';
+  }
+}
+
 function revealSongs(ids) { return ids.map(id => songById.get(id)).filter(Boolean); }
 function safeText(v, max = 100) { return typeof v === 'string' ? v.trim().slice(0, max) : ''; }
 const staticRoutes = {
@@ -180,6 +243,99 @@ const server = http.createServer(async (req, res) => {
         (!q || (s.title + ' ' + s.artist + ' ' + s.language).toLocaleLowerCase('zh-TW').includes(q)));
       return send(res, 200, { songs: matched, total: matched.length });
     }
+
+    // Shared account room. Devices authenticate independently with the same demo account.
+    if (req.method === 'GET' && route === '/api/room')
+      return send(res, 200, { room: roomView(me.username) });
+
+    // Only one active player screen per account; phones/tablets are controllers.
+    if (req.method === 'POST' && route === '/api/room/display') {
+      const body = await readJson(req);
+      const deviceId = safeDeviceId(body.deviceId);
+      if (!deviceId) return send(res, 400, { error: '無效的裝置識別碼。' });
+      const room = roomFor(me.username);
+      if (activeDisplay(room) && room.display.deviceId !== deviceId && body.takeover !== true)
+        return send(res, 409, { error: '目前已有播放螢幕在線；如需更換，請使用接管播放螢幕。' });
+      room.display = {
+        deviceId, name: safeText(body.name, 45) || '播放螢幕',
+        lastSeen: Date.now(), ackRevision: 0, status: 'ready', detail: '待命'
+      };
+      persistRooms();
+      return send(res, 200, { room: roomView(me.username) });
+    }
+
+
+    if (req.method === 'POST' && route === '/api/room/release') {
+      const body = await readJson(req);
+      const room = roomFor(me.username);
+      if (room.display && room.display.deviceId === safeDeviceId(body.deviceId)) {
+        room.display.lastSeen = 0;
+        room.display.status = 'offline';
+        persistRooms();
+      }
+      return send(res, 200, { room: roomView(me.username) });
+    }
+
+    if (req.method === 'POST' && route === '/api/room/heartbeat') {
+      const body = await readJson(req);
+      const room = roomFor(me.username);
+      if (!room.display || room.display.deviceId !== safeDeviceId(body.deviceId))
+        return send(res, 409, { error: '這個裝置已不是指定播放螢幕。' });
+      room.display.lastSeen = Date.now();
+      return send(res, 200, { room: roomView(me.username) });
+    }
+
+    if (req.method === 'POST' && route === '/api/room/ack') {
+      const body = await readJson(req);
+      const room = roomFor(me.username);
+      if (!room.display || room.display.deviceId !== safeDeviceId(body.deviceId))
+        return send(res, 409, { error: '目前播放螢幕已切換。' });
+      if (!Number.isSafeInteger(body.revision) || body.revision !== room.revision)
+        return send(res, 409, { error: '播放指令已更新，忽略過期回報。' });
+      if (!['requested', 'playing', 'paused', 'buffering', 'blocked', 'error', 'ended', 'ready'].includes(body.status))
+        return send(res, 400, { error: '不支援的播放回報。' });
+      room.display.ackRevision = body.revision;
+      room.display.status = body.status;
+      room.display.detail = safeText(body.detail, 120);
+      room.display.lastSeen = Date.now();
+      persistRooms();
+      return send(res, 200, { room: roomView(me.username) });
+    }
+
+    if (req.method === 'POST' && route === '/api/room/command') {
+      const body = await readJson(req);
+      const room = roomFor(me.username);
+      const queue = mine.queue.filter(id => songById.has(id));
+      const command = safeText(body.command, 20);
+      const allowed = ['play', 'pause', 'resume', 'previous', 'next', 'stop'];
+      if (!allowed.includes(command))
+        return send(res, 400, { error: '不支援的遙控指令。' });
+      let id = room.songId;
+      let action = command;
+      if (command === 'play') {
+        id = typeof body.songId === 'string' ? body.songId : id || queue[0];
+        if (!songById.has(id)) return send(res, 400, { error: '請先選擇歌曲。' });
+        if (!queue.includes(id)) {
+          if (queue.length >= 30) return send(res, 409, { error: '歌單最多 30 首。' });
+          mine.queue.push(id);
+          saveState();
+        }
+      } else if (command === 'previous' || command === 'next') {
+        if (!queue.length) return send(res, 409, { error: '待播清單是空的。' });
+        const i = queue.indexOf(id);
+        const target = command === 'next'
+          ? (i === -1 ? 0 : Math.min(i + 1, queue.length - 1))
+          : (i === -1 ? 0 : Math.max(i - 1, 0));
+        id = queue[target];
+        action = 'play';
+      } else if (!id || !songById.has(id)) {
+        return send(res, 409, { error: '目前沒有可控制的歌曲。' });
+      }
+      updateCommand(room, action, id);
+      persistRooms();
+      return send(res, 200, { room: roomView(me.username) });
+    }
+
     if (req.method === 'GET' && route === '/api/queue')
       return send(res, 200, { songs: revealSongs(mine.queue) });
     if (req.method === 'GET' && route === '/api/favorites')

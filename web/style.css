@@ -31,3 +31,23 @@
 button.song-select:hover{color:#d9cbff}
 @media(max-width:900px){.player-grid{grid-template-columns:1fr}.player-details{padding:2px 6px 0}.player-tip{max-width:600px}}
 @media(max-width:650px){.player-section{padding:15px}.player-badge{font-size:9px;padding:6px 8px}.player-header h2{font-size:20px}.player-screen{aspect-ratio:16/9}.song .play-action{padding:7px;font-size:10px}}
+
+
+/* Cross-screen KTV player and remote selection */
+.screen-rolebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 10px}
+.role-button{border:1px solid #555073;border-radius:10px;background:#1f2641;color:#e4e0ff;padding:10px 15px;font-size:12px;font-weight:650;transition:background .15s}
+.role-button:hover,.role-button.selected{background:#7155ba;border-color:#9c82e7;color:#fff}
+.role-button.danger{border-color:#e0a277;color:#ffcb9c}
+.role-button:focus-visible{outline:2px solid #c8a9ff;outline-offset:2px}
+.sync-status{margin-left:auto;display:inline-flex;gap:6px;color:#afb8d8;font-size:12px}
+.sync-status.online{color:#75e6c0}
+.sync-status.offline{color:#efb99d}
+.screen-role-note{margin:0 0 20px;color:#aab2cb;font-size:12px;line-height:1.8}
+.remote-preview{width:100%;height:100%;display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;padding:20px;text-align:center;color:#d9ccff}
+.remote-preview>span{font-size:38px}
+.remote-preview strong{font-size:20px}
+.remote-preview p{font-size:12px;max-width:360px;color:#a1a8ca;margin:0;line-height:1.8}
+.player-screen:has(.remote-preview:not([hidden])){aspect-ratio:16/9}
+.room-feedback{font-size:12px;color:#b7c4dc;background:#20263b;border-radius:9px;padding:10px;margin-bottom:12px}
+.player-btn.selected{background:#5f4ba6;border-color:#8f7ed4}
+@media(max-width:650px){.screen-rolebar{gap:6px}.role-button{font-size:11px;padding:9px}.sync-status{margin:5px 0 0;width:100%}.screen-role-note{font-size:11px}}

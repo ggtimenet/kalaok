@@ -27,3 +27,7 @@ A YouTube player may fail to load or show an error; use the original YouTube lin
 The original source, including .NET Framework Web API and SQL Server backup, remains offline on the authorized Mac at `/Volumes/1T/Case/GPKTV/KTV原始檔`. It is not uploaded here. See [docs/MIGRATION.md](docs/MIGRATION.md).
 
 The demo does **not** yet implement the original real database, commercial karaoke licensing, live multiplayer synchronization, full account registration, payment processing, or cross-device TV control.
+
+## Cross-device remote control
+
+Same-account TV + phone control, playback state acknowledgements and test limitations are documented in [docs/CROSS_SCREEN.md](docs/CROSS_SCREEN.md).
