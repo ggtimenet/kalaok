@@ -1,15 +1,68 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<title>KalaOK｜系統遷移測試</title>
-<link rel="stylesheet" href="/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#0b0d18">
+  <title>KalaOK｜線上點歌測試系統</title>
+  <meta name="description" content="KalaOK 線上點歌系統測試站，提供虛構歌曲與測試帳號供功能驗證。">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
 </head>
 <body>
-<header class="topbar"><div class="mark">♫</div><div><strong>KalaOK</strong><span>線上點歌系統 · 遷移測試</span></div><span class="status">PREVIEW</span></header>
-<main><section class="hero"><p class="eyebrow">KTV SYSTEM / MODERNIZATION</p><h1>把熟悉的點歌體驗<br><em>帶到新的平台。</em></h1><p>這是舊版 KalaOK 系統移轉 Linux／Coolify 的安全預覽環境。目前僅提供介面展示，尚未接入正式歌庫、帳號與點播服務。</p><div class="notice">測試介面 · 功能尚未上線 · 請勿輸入個人資料</div></section>
-<section class="feature-wrap"><h2>系統模組</h2><div class="grid"><article><div class="glyph">⌕</div><h3>搜尋歌曲</h3><p>依歌曲名稱、歌手及分類查詢。</p><span>尚未啟用</span></article><article><div class="glyph">≡</div><h3>點播清單</h3><p>管理候播與已選歌曲。</p><span>尚未啟用</span></article><article><div class="glyph">♡</div><h3>最愛收藏</h3><p>保存喜歡的歌曲與常用歌單。</p><span>尚未啟用</span></article></div></section>
-<section class="footnote"><h2>部署驗證</h2><p>靜態預覽、Nginx 與健康檢查通過後，才會逐步移轉 API 和 SQL Server。此畫面不代表原系統功能已恢復。</p></section></main><footer>© KalaOK · Migration preview · No production credentials or music content</footer>
-</body></html>
+<header class="topbar">
+  <div class="brand"><span class="brand-icon" aria-hidden="true">♫</span>
+    <span><strong>KalaOK</strong><small>KTV PLAYGROUND</small></span></div>
+  <div class="top-actions"><span class="status-dot"></span><span>功能測試環境</span><span class="version">DEMO 1.0</span></div>
+</header>
+<main>
+  <section class="intro">
+    <div class="eyebrow"><span></span> YOUR MUSIC. YOUR MOMENT.</div>
+    <h1>今晚，就從<span>這首歌</span>開始。</h1>
+    <p>從搜尋、點歌到最愛收藏，先體驗 KalaOK 的操作流程。這是測試站，所有歌名、歌手與帳號均為虛構資料。</p>
+    <div class="metrics"><div><strong>20</strong><small>首測試歌曲</small></div><div><strong>03</strong><small>組測試帳號</small></div><div><strong>24/7</strong><small>隨時探索功能</small></div></div>
+  </section>
+  <section class="login-panel" id="loginPane">
+    <div class="login-copy"><span class="eyebrow second">TEST ACCOUNT</span><h2>登入測試帳號</h2><p>請使用提供的測試帳號與密碼登入。每個帳號都有獨立的待播歌曲與收藏資料。</p>
+      <div class="hint"><span class="hint-icon">ⓘ</span><span>測試帳號：<strong>demo01</strong>、<strong>demo02</strong>、<strong>demo03</strong><br>密碼請參考 ChatGPT 提供的測試資訊。</span></div>
+    </div>
+    <form id="loginForm" class="login-form">
+      <label for="username">測試帳號</label><input name="username" id="username" type="text" placeholder="例如 demo01" autocomplete="username" required maxlength="40">
+      <label for="password">測試密碼</label><input name="password" id="password" type="password" placeholder="輸入測試密碼" autocomplete="current-password" required maxlength="128">
+      <button class="primary" id="loginButton" type="submit">登入體驗 <span aria-hidden="true">↗</span></button>
+      <p class="form-note">僅供展示，請勿使用真實帳號或密碼。</p>
+    </form>
+  </section>
+  <section id="appPane" class="app-panel" hidden>
+    <div class="account-strip"><div class="avatar" aria-hidden="true">♪</div><div><span class="welcome">歡迎回來</span><strong id="displayName">測試使用者</strong></div><div class="spacer"></div><span class="signed">● 已登入測試模式</span><button id="logoutButton" class="ghost" type="button">登出</button></div>
+    <div class="workspace">
+      <section class="catalog">
+        <div class="section-heading"><div><span class="eyebrow second">DISCOVER</span><h2>探索歌曲</h2></div><span id="songCount" class="song-count">20 首歌曲</span></div>
+        <label class="searchbox" for="searchInput"><span aria-hidden="true">⌕</span><input id="searchInput" autocomplete="off" placeholder="搜尋歌名、歌手、語言…" type="search"></label>
+        <div id="genreFilters" class="filters" role="group" aria-label="歌曲類型">
+          <button data-genre="全部" class="chip selected" type="button">全部</button>
+          <button data-genre="華語流行" class="chip" type="button">華語流行</button>
+          <button data-genre="抒情" class="chip" type="button">抒情</button>
+          <button data-genre="舞曲" class="chip" type="button">舞曲</button>
+          <button data-genre="台語金曲" class="chip" type="button">台語金曲</button>
+          <button data-genre="日韓精選" class="chip" type="button">日韓精選</button>
+        </div>
+        <div id="songsList" class="song-list" aria-live="polite"></div>
+      </section>
+      <aside class="sidebar">
+        <div class="sidebar-head"><div><span class="eyebrow second">YOUR PLAYLIST</span><h2>已點歌單 <span id="queueCount">0</span></h2></div><span class="head-icon">☷</span></div>
+        <div id="queueList" class="queue-list"></div>
+        <div class="divider"></div>
+        <div class="sidebar-head favorite-head"><div><span class="eyebrow second">SAVED</span><h2>我的最愛 <span id="favoriteCount">0</span></h2></div><span class="head-icon">♡</span></div>
+        <div id="favoriteList" class="favorite-list"></div>
+        <p class="sidebar-note">這裡只模擬點歌清單，不會播放商業歌曲或連線到舊版會員資料庫。</p>
+      </aside>
+    </div>
+  </section>
+  <section class="disclaimer"><div class="label-demo">DEMO ONLY</div><p><strong>這是系統遷移測試站。</strong> 目前已可操作登入、歌曲查詢、點歌單與收藏；影片播放、實際歌庫、會員註冊及舊站 API 尚未接入。</p></section>
+</main>
+<div id="toast" class="toast" aria-live="polite" role="status" hidden></div>
+<footer>© 2026 KalaOK · 系統測試環境 · All demo content is fictional.</footer>
+</body>
+</html>

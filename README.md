@@ -1,37 +1,33 @@
-# KalaOK — Linux / Coolify deployment
+# KalaOK — Interactive Migration Demo
 
-This is a **new, intentionally minimal and safe deployment scaffold**, not a direct upload or successful port of the 2020 legacy system.
+This **testing-only** app provides functional demo login, song search, personal queue and favorites on [kalaok.ggtime.net](https://kalaok.ggtime.net/). It is **not** the restored 2020 legacy KTV service.
 
-## What is deployed
+## What is implemented
 
-- A responsive, static **migration preview** served by Nginx on port `8080`.
-- A `/healthz` endpoint for Docker / Coolify health monitoring.
-- No database connection, credentials, user accounts, legacy videos or original program binaries.
-- Frontend UI explicitly labels unimplemented song-search and queue features.
+- 3 host-configured testing accounts with individual seeded queues and favorites.
+- 20 fictional song records, searchable by title, artist and language.
+- Add/remove queue items, toggle favorites, logout, persistent JSON state.
+- Server-side password validation using scrypt hashes; HMAC-signed, HttpOnly, Secure, SameSite cookies.
+- Node.js HTTP server with built-in dependencies only; health endpoint `/healthz`.
+- Production preview routes through Cloudflare and the existing Traefik proxy.
+- No real video, audio, payments, signups, original song library, old API, legacy DB or user data.
 
-## Original source (kept offline, NOT uploaded)
+**Security:** Credentials and signing secret are generated on the authorized host and stored in `/opt/kalaok-preview/.env`, **never** in Git. Do not put password hashes or the `TEST-ACCOUNTS.txt` file in the public repository. The actual test passwords are provided privately to the tester. Accounts carry no production permissions.
 
-Source location on the authorized Mac: `/Volumes/1T/Case/GPKTV/KTV原始檔`.
+## Deployment
 
-The original source includes an ASP.NET **.NET Framework 4.7.2** Web API (Web API 2 / Entity Framework 6), several .NET Framework Windows console utilities, a static frontend, a legacy SQL Server SQL script and an approximately 973 MB SQL Server backup (`data20240326`). These do not run together unchanged on Linux containers.
+This source uses the root `Dockerfile` (Node 22 Alpine, port `8080`) and requires:
 
-Do not publish the old `.config`, JS auth values, SQL backup, copyrighted artwork, vendor binaries or any user/customer data. **A Basic authorization value was hardcoded in the legacy browser-side JS and must be revoked / replaced before any production release.**
+- `KALAOK_DEMO_USERS_B64`: Base64-encoded JSON array of user objects `{ username, displayName, salt, hash }`. Each hash is 32-byte scrypt `N=16384,r=8,p=1` hex.
+- `KALAOK_SESSION_SECRET`: Random hex string of at least 32 bytes.
+- `KALAOK_DATA_DIR`: Writable persisted path (default `/data`).
 
-## Local preview
+The existing deployment uses Docker Compose in `/opt/kalaok-preview`. A systemd timer checks GitHub `main` every five minutes, rebuilds the service on changes and attempts rollback if the container fails its health check. This is **polling, not a GitHub webhook**, and the deployment is **not registered as a Coolify Application**.
 
-```bash
-docker build -t kalaok-preview:local .
-docker run --rm -p 127.0.0.1:18080:8080 kalaok-preview:local
-curl -fsS http://127.0.0.1:18080/healthz
-```
+A local test may set `COOKIE_SECURE=false` for HTTP-only smoke tests. Leave the variable unset when serving the site publicly on HTTPS.
 
-## Coolify deployment
+## Legacy modernization
 
-- Source: public Git repository `https://github.com/ggtimenet/kalaok`
-- Branch: `main`
-- Build pack: **Dockerfile**, path `/Dockerfile`
-- Exposed port: `8080`
-- Set the app to **noindex**; prefer an isolated temporary hostname and optional access controls.
-- Do not mark song requests, login, or payment features production-ready.
+The real 2020 legacy source remains offline at `/Volumes/1T/Case/GPKTV/KTV原始檔` on the authorized Mac. It contains old ASP.NET/.NET Framework applications and a SQL Server backup that are **not** published here. See [docs/MIGRATION.md](docs/MIGRATION.md).
 
-See [docs/MIGRATION.md](docs/MIGRATION.md) for architecture and migration roadmap.
+Do not copy old credentials, SQL backups, personal records, copyrighted music, third-party binary assets or production keys into this repository.
