@@ -1,0 +1,21 @@
+# Legacy source, private settings and sensitive data
+*.bak
+*.bacpac
+*.mdf
+*.ldf
+*.pfx
+*.p12
+*.pem
+*.key
+.env
+.env.*
+!*.env.example
+**/Web.config
+**/App.config
+**/secrets.*
+**/bin/
+**/obj/
+**/.vs/
+data20240326
+._*
+.DS_Store
