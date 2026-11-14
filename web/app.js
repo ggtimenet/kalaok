@@ -66,7 +66,10 @@ function setRoleUI() {
   el('screenModeButton').classList.toggle('selected', state.role === 'screen');
   el('remoteModeButton').classList.toggle('selected', state.role === 'remote');
   el('remotePreview').hidden = state.role !== 'remote';
-  el('youtube-player').hidden = state.role === 'remote';
+  const isLocal = state.room?.song?.mediaType === 'local';
+  el('youtube-player').hidden = state.role === 'remote' || isLocal;
+  el('local-video').hidden = state.role === 'remote' || !isLocal;
+  el('activatePlayback').hidden = state.role !== 'screen';
 }
 function cover(index) {
   const colors = [['#7456cc','#4c98ba'],['#eb718d','#9654bc'],
@@ -79,7 +82,8 @@ function allVisibleSongs() {
 }
 function findSong(id) { return allVisibleSongs().find(s => s.id === id); }
 function sourceLabel(song) {
-  return song.sourceChannel ? song.sourceChannel + ' · YouTube 伴唱影片' : 'YouTube 伴唱影片';
+  if (song.mediaType === 'local') return 'KalaOK 原創測試片 · 無 YouTube 限制';
+  return (song.sourceChannel || 'YouTube') + ' · 嵌入權限未驗證';
 }
 function renderSongs() {
   const panel = el('songsList');
@@ -178,12 +182,19 @@ function updateRoomPresentation(room) {
   if (room.song) {
     el('nowTitle').textContent = room.song.title;
     el('nowArtist').textContent = room.song.artist + ' · ' + sourceLabel(room.song);
-    el('youtubeSource').href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(room.song.videoId);
-    el('youtubeSource').hidden = false;
+    const isYoutube = room.song.mediaType !== 'local' && /^[\w-]{11}$/.test(room.song.videoId || '');
+    el('youtubeSource').hidden = !isYoutube;
+    el('youtubeSearch').hidden = !isYoutube;
+    if (isYoutube) {
+      el('youtubeSource').href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(room.song.videoId);
+      const query = room.song.title + ' ' + room.song.artist + ' Karaoke 伴唱';
+      el('youtubeSearch').href = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query);
+    }
   } else {
     el('nowTitle').textContent = '選擇歌曲開始播放';
     el('nowArtist').textContent = '在同帳號的任一裝置上選歌';
     el('youtubeSource').hidden = true;
+    el('youtubeSearch').hidden = true;
   }
   const ack = room.display.ackRevision >= room.revision && room.revision > 0;
   const labels = {
@@ -192,7 +203,7 @@ function updateRoomPresentation(room) {
     paused: '播放螢幕已回報暫停',
     buffering: 'YouTube 正在緩衝',
     blocked: '瀏覽器阻擋自動播放；請到播放螢幕點一下播放器',
-    error: 'YouTube 播放失敗，請改用下方原始連結',
+    error: '影片無法播放：YouTube 來源可能禁止嵌入。可使用下方原站連結，或播放原創測試片驗證遙控功能',
     ended: '這首歌已播完',
     ready: '播放螢幕準備就緒',
     waiting: '正在等待播放螢幕回報',
@@ -263,7 +274,7 @@ function initYouTubePlayer() {
         }
       },
       onStateChange:event=>{
-        if (state.role !== 'screen') return;
+        if (state.role !== 'screen' || state.room?.song?.mediaType === 'local') return;
         const types=window.YT?.PlayerState;
         if (!types) return;
         if (event.data === types.PLAYING) {
@@ -285,20 +296,61 @@ function initYouTubePlayer() {
         }
       },
       onAutoplayBlocked:()=>{
-        setPlayerStatus('瀏覽器阻擋遠端自動播放；請在播放螢幕上點擊「繼續播放」。');
+        if (state.room?.song?.mediaType === 'local') return;
+        setPlayerStatus('瀏覽器阻擋遠端自動播放；請在播放螢幕上點擊「📺 在此啟動播放」。');
         reportScreen('blocked','需要在播放螢幕上手動啟用');
       },
       onError:event=>{
-        setPlayerStatus('YouTube 錯誤 '+event.data+'。可以在 YouTube 原站開啟影片。');
-        reportScreen('error','YouTube 錯誤 '+event.data);
+        if (state.room?.song?.mediaType === 'local') return;
+        const denied = event.data === 101 || event.data === 150;
+        const message = denied ?
+          '影片擁有者禁止第三方網站嵌入（YouTube 101/150）。可改在 YouTube 開啟，或播放下方原創測試片。' :
+          'YouTube 播放錯誤 ' + event.data + '。可嘗試原始連結或下方原創測試片。';
+        setPlayerStatus(message);
+        reportScreen('error',denied ? '影片禁止嵌入 (YouTube '+event.data+')' : 'YouTube 錯誤 '+event.data);
       }
     }
   });
 }
+function applyLocalVideo(room) {
+  const video = el('local-video');
+  const song = room.song;
+  const action = room.action;
+  if (ytPlayer && playerReady) {
+    try { ytPlayer.pauseVideo(); } catch {}
+  }
+  setRoleUI();
+  if (video.getAttribute('src') !== song.mediaPath) {
+    video.src = song.mediaPath;
+    video.load();
+  }
+  if (action === 'stop' || action === 'pause') {
+    video.pause();
+    if (action === 'stop') video.currentTime = 0;
+    reportScreen('paused',action === 'stop' ? '原創影片已停止' : '原創影片已暫停');
+    return;
+  }
+  setPlayerStatus('本機原創測試影片：正在接收跨螢幕播放指令…');
+  reportScreen('requested','原創測試影片已收到播放指令');
+  video.play().catch(error => {
+    if (state.role !== 'screen' || state.room?.song?.mediaType !== 'local') return;
+    setPlayerStatus('自動播放被瀏覽器阻止。請在播放螢幕上按「📺 在此啟動播放」。');
+    reportScreen('blocked','需在播放螢幕手動啟動一次（'+error.name+'）');
+  });
+}
+
 function applyScreenCommand(room) {
   if (state.role !== 'screen') return;
   const song=room.song;
-  if (!song || !/^[\w-]{11}$/.test(song.videoId || '')) return;
+  if (!song) return;
+  if (song.mediaType === 'local') {
+    applyLocalVideo(room);
+    return;
+  }
+  if (!/^[\w-]{11}$/.test(song.videoId || '')) return;
+  const localVideo = el('local-video');
+  if (!localVideo.paused) localVideo.pause();
+  setRoleUI();
   const action=room.action;
   if (action === 'stop') {
     try { if (playerReady) ytPlayer.stopVideo(); } catch {}
@@ -523,6 +575,49 @@ el('playPauseButton').addEventListener('click',async()=>{
 el('previousButton').addEventListener('click',async()=>{
   try {await sendRoomCommand('previous');}
   catch(err){notify(err.message);}
+});
+el('localTestButton').addEventListener('click',async()=>{
+  try {
+    await sendRoomCommand('play','s09');
+    notify('已將原創測試片傳送到播放螢幕；如需音訊，請在播放螢幕手動啟動一次。');
+  } catch(err) { notify(err.message); }
+});
+el('activatePlayback').addEventListener('click',()=>{
+  if (state.role !== 'screen') return;
+  if (state.room?.song?.mediaType === 'local') {
+    el('local-video').play().catch(()=>notify('請先在影片控制列點擊播放。'));
+  } else if (ytPlayer && playerReady) {
+    try { ytPlayer.playVideo(); }
+    catch { notify('YouTube 不允許播放；請選用原創測試片。'); }
+  } else {
+    notify('先在手機或電視端選擇一首歌曲。');
+  }
+});
+const localPlayer=el('local-video');
+localPlayer.addEventListener('playing',()=>{
+  if (state.role==='screen' && state.room?.song?.mediaType==='local') {
+    setPlayerStatus('原創測試影片正在播放：此時手機可測試暫停／繼續與切歌。');
+    reportScreen('playing','原創 HTML5 影片播放中');
+  }
+});
+localPlayer.addEventListener('pause',()=>{
+  if (state.role==='screen' && state.room?.song?.mediaType==='local' && !localPlayer.ended) {
+    reportScreen('paused','原創測試影片已暫停');
+  }
+});
+localPlayer.addEventListener('ended',()=>{
+  if (state.role==='screen' && state.room?.song?.mediaType==='local') {
+    reportScreen('ended','原創測試影片已播放完畢');
+    const i=state.queue.findIndex(song=>song.id===state.room?.songId);
+    if (i>=0 && i<state.queue.length-1) {
+      sendRoomCommand('next').catch(err=>notify(err.message));
+    }
+  }
+});
+localPlayer.addEventListener('error',()=>{
+  if (state.role==='screen' && state.room?.song?.mediaType==='local') {
+    reportScreen('error','原創測試影片載入失敗');
+  }
 });
 el('nextButton').addEventListener('click',async()=>{
   try {await sendRoomCommand('next');}

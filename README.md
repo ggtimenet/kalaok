@@ -31,3 +31,7 @@ The demo does **not** yet implement the original real database, commercial karao
 ## Cross-device remote control
 
 Same-account TV + phone control, playback state acknowledgements and test limitations are documented in [docs/CROSS_SCREEN.md](docs/CROSS_SCREEN.md).
+
+## Embedded YouTube restrictions and local diagnostic playback
+
+See [docs/PLAYBACK_TEST.md](docs/PLAYBACK_TEST.md). YouTube embed error 150 cannot be bypassed; a self-generated 10-second MP4 is provided for controlled two-screen playback testing.

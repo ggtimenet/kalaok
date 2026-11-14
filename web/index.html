@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b0d18">
   <title>KalaOK｜線上點歌測試系統</title>
   <meta name="description" content="KalaOK 線上點歌系統測試站，提供真實 YouTube 伴唱影片清單及測試帳號供功能驗證。">
-  <link rel="stylesheet" href="/style.css?v=20261114d">
-  <script src="/app.js?v=20261114d" defer></script>
+  <link rel="stylesheet" href="/style.css?v=20261114e">
+  <script src="/app.js?v=20261114e" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -21,7 +21,7 @@
     <div class="eyebrow"><span></span> YOUR MUSIC. YOUR MOMENT.</div>
     <h1>今晚，就從<span>這首歌</span>開始。</h1>
     <p>從搜尋、點歌到最愛收藏，先體驗 KalaOK 的操作流程。這是測試站，歌曲資料改採 YouTube 公開伴唱影片；登入帳號與點歌紀錄仍為測試資料。</p>
-    <div class="metrics"><div><strong>08</strong><small>支 YouTube 伴唱影片</small></div><div><strong>03</strong><small>組測試帳號</small></div><div><strong>24/7</strong><small>隨時探索功能</small></div></div>
+    <div class="metrics"><div><strong>09</strong><small>8 首來源＋1 支原創測試片</small></div><div><strong>03</strong><small>組測試帳號</small></div><div><strong>24/7</strong><small>隨時探索功能</small></div></div>
   </section>
   <section class="login-panel" id="loginPane">
     <div class="login-copy"><span class="eyebrow second">TEST ACCOUNT</span><h2>登入測試帳號</h2><p>請使用提供的測試帳號與密碼登入。每個帳號都有獨立的待播歌曲與收藏資料。</p>
@@ -46,7 +46,7 @@
       </div>
       <p class="screen-role-note">在電視／電腦選「播放螢幕」，手機用相同帳號選「遙控器」。登入同一帳號即可同步；不需要兩邊播放 YouTube。</p>
       <div class="player-grid">
-        <div class="player-screen"><div id="youtube-player" class="youtube-player" aria-label="YouTube 影片播放器"><span class="player-placeholder">📺 請先設為「播放螢幕」，再從任一裝置點歌。</span></div>
+        <div class="player-screen"><div id="youtube-player" class="youtube-player" aria-label="YouTube 影片播放器"><span class="player-placeholder">📺 請先設為「播放螢幕」，再從任一裝置點歌。</span></div><video id="local-video" class="local-video" controls playsinline preload="metadata" hidden aria-label="KalaOK 原創功能測試影片"></video>
           <div id="remotePreview" class="remote-preview" hidden><span aria-hidden="true">📱</span><strong>遙控器模式</strong><p>這台裝置不播放影音。請操作下方控制鍵，指令會送到同帳號的播放螢幕。</p></div></div>
         <div class="player-details">
           <span class="eyebrow second">NOW PLAYING</span>
@@ -56,22 +56,26 @@
             <button id="previousButton" class="player-btn" type="button" disabled>← 上一首</button>
             <button id="playPauseButton" class="player-btn" type="button" disabled>▶ 播放</button>
             <button id="nextButton" class="player-btn" type="button" disabled>下一首 →</button>
+            <button id="activatePlayback" class="player-btn activate-btn" type="button" hidden>📺 在此啟動播放</button>
           </div>
           <p class="player-status" id="playerStatus" role="status" aria-live="polite">指定播放螢幕後，可以跨裝置遙控點歌。</p>
           <p id="roomFeedback" class="room-feedback" aria-live="polite">尚未連線到播放螢幕</p>
           <a id="youtubeSource" class="youtube-source" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" hidden>在 YouTube 開啟此影片 ↗</a>
-          <p class="player-tip">播放螢幕接收同帳號的播放／暫停／上一首／下一首指令，約每 1–2 秒同步。YouTube 可能限制嵌入或跨裝置自動播放；請先在電視端點一下播放器，遇到限制時使用 YouTube 原站連結。</p>
+          <a id="youtubeSearch" class="youtube-source" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" hidden>尋找其他伴唱版本 ↗</a>
+          <button id="localTestButton" class="local-test-button" type="button">▶ 播放 10 秒原創測試影片（驗證遙控功能）</button>
+          <p class="player-tip">播放螢幕接收同帳號的播放／暫停／上一首／下一首指令。YouTube 若禁止嵌入（錯誤 101／150），無法在 KalaOK 強制播放；請改播原創測試影片確認遙控正常，或開啟 YouTube 原站。跨裝置自動播放可能需在電視端點擊播放一次。</p>
         </div>
       </div>
     </section>
     <div class="workspace">
       <section class="catalog">
-        <div class="section-heading"><div><span class="eyebrow second">DISCOVER</span><h2>探索歌曲</h2></div><span id="songCount" class="song-count">20 首歌曲</span></div>
+        <div class="section-heading"><div><span class="eyebrow second">DISCOVER</span><h2>探索歌曲</h2></div><span id="songCount" class="song-count">9 首測試項目</span></div>
         <label class="searchbox" for="searchInput"><span aria-hidden="true">⌕</span><input id="searchInput" autocomplete="off" placeholder="搜尋歌名、歌手、語言…" type="search"></label>
         <div id="genreFilters" class="filters" role="group" aria-label="歌曲類型">
           <button data-genre="全部" class="chip selected" type="button">全部</button>
           <button data-genre="華語伴唱" class="chip" type="button">華語伴唱</button>
           <button data-genre="西洋伴唱" class="chip" type="button">西洋伴唱</button>
+          <button data-genre="功能測試" class="chip" type="button">功能測試</button>
         </div>
         <p class="interaction-hint">點擊封面、歌名或「▶ 播放」可從此裝置遙控播放螢幕；「＋ 點歌」只加入共用待播清單。<strong>播放功能取決於影片提供者的 YouTube 嵌入權限。</strong></p>
         <div id="songsList" class="song-list" aria-live="polite"></div>

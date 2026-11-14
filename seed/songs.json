@@ -70,5 +70,16 @@
     "language": "英語",
     "videoId": "XZN3DaxqFuQ",
     "sourceChannel": "Sing King"
+  },
+  {
+    "id": "s09",
+    "title": "影音同步測試（10 秒）",
+    "artist": "KalaOK 原創測試片",
+    "genre": "功能測試",
+    "language": "測試",
+    "mediaType": "local",
+    "mediaPath": "/media/sync-test.mp4",
+    "duration": "00:10",
+    "sourceChannel": "KalaOK Demo"
   }
 ]

@@ -186,6 +186,38 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { ...commonHeaders, 'Content-Type': 'text/plain; charset=utf-8' });
       return res.end('ok\n');
     }
+
+    // Self-produced, rights-clear diagnostic clip: supports Safari/Chrome byte-range requests.
+    if (route === '/media/sync-test.mp4' && (req.method === 'GET' || req.method === 'HEAD')) {
+      const file = path.join(__dirname, 'web', 'media', 'sync-test.mp4');
+      const bytes = fs.statSync(file).size;
+      let start = 0, end = bytes - 1, status = 200;
+      if (req.headers.range) {
+        const match = /^bytes=(\d+)-(\d*)$/.exec(req.headers.range);
+        if (!match) {
+          res.writeHead(416, { ...commonHeaders, 'Content-Range': 'bytes */' + bytes });
+          return res.end();
+        }
+        start = Number(match[1]);
+        end = match[2] ? Number(match[2]) : bytes - 1;
+        if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) ||
+            start >= bytes || end >= bytes || end < start) {
+          res.writeHead(416, { ...commonHeaders, 'Content-Range': 'bytes */' + bytes });
+          return res.end();
+        }
+        status = 206;
+      }
+      const headers = {
+        ...commonHeaders, 'Content-Type': 'video/mp4', 'Accept-Ranges': 'bytes',
+        'Cache-Control': 'public, max-age=86400',
+        'Content-Length': end - start + 1
+      };
+      if (status === 206) headers['Content-Range'] = 'bytes ' + start + '-' + end + '/' + bytes;
+      res.writeHead(status, headers);
+      if (req.method === 'HEAD') return res.end();
+      fs.createReadStream(file, { start, end }).pipe(res);
+      return;
+    }
     if (req.method === 'GET' && staticRoutes[route]) {
       const [filename, type] = staticRoutes[route];
       const bytes = fs.readFileSync(path.join(__dirname, 'web', filename));
